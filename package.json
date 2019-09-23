@@ -1,0 +1,38 @@
+{
+  "name": "editorTest",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint .",
+    "android": "react-native run-android",
+    "android:release": "sh build_android_apk.sh",
+    "android:rerun": "npm run android:clean && npm run android",
+    "android:upload": "cd android && ./gradlew bundleRelease",
+    "android:debug": "npm run android:bundleDebug && cd android && ./gradlew assembleDebug",
+    "android:bundleDebug": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+    "android:clean": "cd android && ./gradlew clean && ./gradlew cleanBuild && ./gradlew cleanBuildCache",
+    "clean": "watchman watch-del-all && rm -rf /tmp/metro-bundler-cache-* && rm -rf /tmp/haste-map-react-native-packager-*",
+    "android:coldStart": "rm -rf node_modules/ && rm -rf package-lock.json && npm i && npm run android:rerun"
+  },
+  "dependencies": {
+    "react": "16.8.6",
+    "react-native": "0.60.5",
+    "react-native-image-crop-picker": "0.25.2",
+    "react-native-photo-editor": "0.0.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/runtime": "^7.6.0",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.4.0",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.8.6"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
