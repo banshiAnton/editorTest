@@ -47,7 +47,7 @@ class App extends React.Component {
         },
         colors: this.colors,
         path,
-        editedImageDirectory: 'OTU chat/edited'
+        editedImageDirectory: 'OTU chat/edited',
       });
     });
   };
