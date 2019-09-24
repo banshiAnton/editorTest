@@ -38,10 +38,11 @@ class App extends React.Component {
       console.log(image);
       const path = image.path.replace(/(file|content):\/\//, '');
       console.warn('Path', path);
-      RNPhotoEditor.Edit({
+      RNPhotoEditor({
         onCancel: this.onCancel,
-        onDone: () => {
-          this.setState({photo: image.path});
+        onDone: newPath => {
+          console.warn('args', newPath);
+          this.setState({photo: `file://${newPath}`});
           this.forceUpdate();
         },
         colors: this.colors,
@@ -54,7 +55,10 @@ class App extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.photo && (
-          <Image source={{uri: this.state.photo}} style={{width: 500, height: 500}} />
+          <Image
+            source={{uri: this.state.photo}}
+            style={{width: 500, height: 500}}
+          />
         )}
         <Button title="Open" onPress={this.open} />
       </View>
