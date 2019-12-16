@@ -7,13 +7,15 @@
  */
 
 import React from 'react';
-import {View, Button, StyleSheet, Image} from 'react-native';
-import {RNPhotoEditor} from 'react-native-photo-editor';
+import { View, Button, StyleSheet, Image } from 'react-native';
+import { RNPhotoEditor } from 'react-native-photo-editor';
+import Video from 'react-native-video';
 import ImagePicker from 'react-native-image-crop-picker';
 
 class App extends React.Component {
   state = {
-    photo: null,
+    uri: null,
+    type: null,
   };
 
   colors = [
@@ -33,16 +35,21 @@ class App extends React.Component {
   onCancel = (...args) => console.warn('onCancel', args);
 
   open = () => {
-    this.setState({photo: null});
+    this.setState({ uri: null, type: null });
     ImagePicker.openPicker({}).then(image => {
       console.log(image);
       const path = image.path.replace(/(file|content):\/\//, '');
       console.warn('Path', path);
+      const type = image.mime.split('/')[0]
+      this.setState({ type })
+      if (type === 'video') {
+        return this.setState({ uri: image.path })
+      }
       RNPhotoEditor({
         onCancel: this.onCancel,
         onDone: newPath => {
           console.warn('args', newPath);
-          this.setState({photo: `file://${newPath}`});
+          this.setState({ uri: `file://${newPath}` });
           this.forceUpdate();
         },
         colors: this.colors,
@@ -55,11 +62,21 @@ class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.photo && (
+        {this.state.type === 'image' && this.state.uri && (
           <Image
-            source={{uri: this.state.photo}}
-            style={{width: 500, height: 500}}
+            source={{ uri: this.state.uri }}
+            style={{ width: 500, height: 500 }}
           />
+        )}
+        {this.state.type === 'video' && this.state.uri && (
+          <Video source={{ uri: this.state.uri }}   // Can be a URL or a local file.                                // Store reference
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0
+            }} />
         )}
         <Button title="Open" onPress={this.open} />
       </View>

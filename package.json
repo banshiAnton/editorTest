@@ -20,7 +20,8 @@
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-image-crop-picker": "0.25.2",
-    "react-native-photo-editor": "github:banshiAnton/react-native-photo-editor#dev"
+    "react-native-photo-editor": "github:banshiAnton/react-native-photo-editor#dev",
+    "react-native-video": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
