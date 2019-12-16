@@ -15,7 +15,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 class App extends React.Component {
   state = {
     uri: null,
-    type: null,
+    type: 'image',
   };
 
   colors = [
@@ -35,31 +35,34 @@ class App extends React.Component {
   onCancel = (...args) => console.warn('onCancel', args);
 
   open = () => {
-    this.setState({ uri: null, type: null });
+    this.setState({ uri: null });
     ImagePicker.openPicker({}).then(image => {
       console.log(image);
       const path = image.path.replace(/(file|content):\/\//, '');
       console.warn('Path', path);
       const type = image.mime.split('/')[0]
-      this.setState({ type })
+      // this.setState({ type })
       if (type === 'video') {
-        return this.setState({ uri: image.path })
+        //return this.setState({ uri: image.path })
       }
       RNPhotoEditor({
         onCancel: this.onCancel,
-        onDone: newPath => {
-          console.warn('args', newPath);
-          this.setState({ uri: `file://${newPath}` });
+        onDone: ({ imagePath }) => {
+          console.warn('args', imagePath);
+          this.setState({ uri: `file://${imagePath}` });
           this.forceUpdate();
         },
         colors: this.colors,
         path,
+        width: image.width,
+        height: image.height,
         editedImageDirectory: 'OTU chat/edited',
       });
     });
   };
 
   render() {
+    console.warn(this.state.type === 'image' && this.state.uri)
     return (
       <View style={styles.container}>
         {this.state.type === 'image' && this.state.uri && (
